@@ -1,109 +1,241 @@
-@import "tailwindcss";
+/* Legacy Static CSS for Amazon Kindle & E-Ink Browsers */
 
-@theme {
-  --font-sans: "Inter", ui-sans-serif, system-ui, sans-serif;
-  --font-serif: ui-serif, Georgia, Cambria, "Times New Roman", Times, serif;
-}
-
-/* Kindle optimizations */
-* {
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
   transition: none !important;
   animation: none !important;
+  -webkit-tap-highlight-color: transparent;
 }
 
-body {
+html, body {
+  width: 100%;
+  height: 100%;
   background-color: #ffffff;
   color: #000000;
-  font-family: var(--font-serif);
+  font-family: Georgia, Cambria, "Times New Roman", Times, serif;
+  font-size: 16px;
+  line-height: 1.4;
   -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
 }
+
+/* Layout utilities */
+.flex { display: -webkit-flex; display: flex; }
+.flex-1 { -webkit-flex: 1 1 0%; flex: 1 1 0%; }
+.flex-col { -webkit-flex-direction: column; flex-direction: column; }
+.flex-row { -webkit-flex-direction: row; flex-direction: row; }
+.flex-grow { -webkit-flex-grow: 1; flex-grow: 1; }
+.flex-wrap { -webkit-flex-wrap: wrap; flex-wrap: wrap; }
+.shrink-0 { -webkit-flex-shrink: 0; flex-shrink: 0; }
+.items-center { -webkit-align-items: center; align-items: center; }
+.items-start { -webkit-align-items: flex-start; align-items: flex-start; }
+.justify-center { -webkit-justify-content: center; justify-content: center; }
+.justify-between { -webkit-justify-content: space-between; justify-content: space-between; }
+.justify-start { -webkit-justify-content: flex-start; justify-content: flex-start; }
+
+/* Grid Fallback for Old WebKit */
+.grid { display: block; width: 100%; }
+.grid-cols-2 > * { display: inline-block; width: 48%; margin-right: 2%; vertical-align: top; }
+.grid-cols-4 > * { display: inline-block; width: 23%; margin-right: 1.5%; vertical-align: top; }
+
+/* Positioning */
+.relative { position: relative; }
+.absolute { position: absolute; }
+.fixed { position: fixed; }
+.inset-0 { top: 0; right: 0; bottom: 0; left: 0; }
+.z-50 { z-index: 50; }
+.z-\[999\] { z-index: 999; }
+
+/* Spacing & Gaps */
+.gap-1 { gap: 4px; }
+.gap-2 { gap: 8px; }
+.gap-3 { gap: 12px; }
+.gap-4 { gap: 16px; }
+.gap-6 { gap: 24px; }
+.gap-8 { gap: 32px; }
+
+.space-y-2 > * + * { margin-top: 8px; }
+.space-y-4 > * + * { margin-top: 16px; }
+.space-y-6 > * + * { margin-top: 24px; }
+.space-y-8 > * + * { margin-top: 32px; }
+
+.w-full { width: 100%; }
+.h-full { height: 100%; }
+.h-screen { height: 100vh; }
+.h-6 { height: 24px; }
+.h-16 { height: 64px; }
+.max-w-xs { max-width: 320px; }
+.max-w-md { max-width: 448px; }
+.max-w-lg { max-width: 512px; }
+.max-w-xl { max-width: 576px; }
+.max-w-2xl { max-width: 672px; }
+.max-w-4xl { max-width: 896px; }
+.mx-auto { margin-left: auto; margin-right: auto; }
+
+/* Spacing */
+.p-1 { padding: 4px; }
+.p-2 { padding: 8px; }
+.p-3 { padding: 12px; }
+.p-4 { padding: 16px; }
+.p-6 { padding: 24px; }
+.p-8 { padding: 32px; }
+.px-2 { padding-left: 8px; padding-right: 8px; }
+.px-3 { padding-left: 12px; padding-right: 12px; }
+.px-4 { padding-left: 16px; padding-right: 16px; }
+.px-6 { padding-left: 24px; padding-right: 24px; }
+.px-8 { padding-left: 32px; padding-right: 32px; }
+.px-12 { padding-left: 48px; padding-right: 48px; }
+.py-1 { padding-top: 4px; padding-bottom: 4px; }
+.py-1\.5 { padding-top: 6px; padding-bottom: 6px; }
+.py-2 { padding-top: 8px; padding-bottom: 8px; }
+.py-3 { padding-top: 12px; padding-bottom: 12px; }
+.py-4 { padding-top: 16px; padding-bottom: 16px; }
+.py-6 { padding-top: 24px; padding-bottom: 24px; }
+.pb-2 { padding-bottom: 8px; }
+.pb-4 { padding-bottom: 16px; }
+.pt-4 { padding-top: 16px; }
+.pt-8 { padding-top: 32px; }
+
+.m-0 { margin: 0; }
+.m-2 { margin: 8px; }
+.m-4 { margin: 16px; }
+.mt-1 { margin-top: 4px; }
+.mt-2 { margin-top: 8px; }
+.mt-4 { margin-top: 16px; }
+.mt-6 { margin-top: 24px; }
+.mt-8 { margin-top: 32px; }
+.mb-1 { margin-bottom: 4px; }
+.mb-2 { margin-bottom: 8px; }
+.mb-4 { margin-bottom: 16px; }
+.mb-6 { margin-bottom: 24px; }
+.mb-8 { margin-bottom: 32px; }
+.mb-12 { margin-bottom: 48px; }
+
+/* Colors & Borders */
+.bg-white { background-color: #ffffff !important; }
+.bg-black { background-color: #000000 !important; }
+.bg-gray-100 { background-color: #f5f5f5 !important; }
+.bg-gray-200 { background-color: #e5e5e5 !important; }
+
+.text-white { color: #ffffff !important; }
+.text-black { color: #000000 !important; }
+.text-gray-600 { color: #444444 !important; }
+.text-gray-700 { color: #333333 !important; }
+.text-gray-800 { color: #222222 !important; }
+.text-red-600 { color: #000000 !important; }
+
+.opacity-40 { opacity: 0.4; }
+.opacity-50 { opacity: 0.5; }
+.opacity-60 { opacity: 0.6; }
+
+.border { border: 1px solid #000000; }
+.border-2 { border: 2px solid #000000; }
+.border-4 { border: 4px solid #000000; }
+.border-t { border-top: 1px solid #000000; }
+.border-t-2 { border-top: 2px solid #000000; }
+.border-b { border-bottom: 1px solid #000000; }
+.border-b-2 { border-bottom: 2px solid #000000; }
+.border-l-4 { border-left: 4px solid #000000; }
+.border-black { border-color: #000000; }
+.border-red-600 { border-color: #000000; }
+
+/* Typography */
+.font-sans { font-family: "Helvetica Neue", Helvetica, Arial, sans-serif !important; }
+.font-serif { font-family: Georgia, Cambria, "Times New Roman", Times, serif !important; }
+.font-mono { font-family: Courier, "Courier New", monospace !important; }
+.font-bold { font-weight: bold !important; }
+.font-normal { font-weight: normal !important; }
+.italic { font-style: italic; }
+
+.text-xs { font-size: 11px; }
+.text-sm { font-size: 13px; }
+.text-base { font-size: 16px; }
+.text-lg { font-size: 18px; }
+.text-xl { font-size: 20px; }
+.text-2xl { font-size: 24px; }
+.text-3xl { font-size: 28px; }
+.text-4xl { font-size: 32px; }
+.text-5xl { font-size: 40px; }
+.text-6xl { font-size: 48px; }
+
+.text-center { text-align: center; }
+.text-left { text-align: left; }
+.text-right { text-align: right; }
+.uppercase { text-transform: uppercase; }
+.tracking-widest { letter-spacing: 2px; }
+.tracking-wider { letter-spacing: 1px; }
+
+/* Interactive & Forms */
+button, input, select {
+  font-family: inherit;
+  font-size: inherit;
+  color: #000000;
+  background-color: #ffffff;
+  border: 2px solid #000000;
+  padding: 8px 16px;
+  outline: none;
+  border-radius: 0;
+  -webkit-appearance: none;
+  appearance: none;
+}
+
+button {
+  cursor: pointer;
+  font-weight: bold;
+}
+
+button:hover, button:active, .hover\:bg-black:hover {
+  background-color: #000000 !important;
+  color: #ffffff !important;
+}
+
+input[type="text"], input[type="password"], input[type="email"] {
+  width: 100%;
+  background-color: #ffffff;
+  color: #000000;
+  border: 2px solid #000000;
+  padding: 10px 14px;
+}
+
+.cursor-pointer { cursor: pointer; }
+.select-none { -webkit-user-select: none; user-select: none; }
+.overflow-hidden { overflow: hidden; }
+.overflow-y-auto { overflow-y: auto; }
+.block { display: block; }
+.hidden { display: none; }
+
+/* Anki Flashcard Styling */
 .card {
-  font-family: "ヒラギノ角ゴ Pro W3", "Hiragino Kaku Gothic Pro", "Noto Sans JP", "Noto Sans CJK JP", Osaka, "メイリオ", Meiryo, "ＭＳ Ｐゴシック", "MS PGothic", "MS UI Gothic", sans-serif;
-  font-size: 44px;
+  font-family: Georgia, "Hiragino Kaku Gothic Pro", "Noto Sans JP", serif;
+  font-size: 32px;
   text-align: center;
   word-wrap: break-word;
   overflow-wrap: anywhere;
   word-break: break-word;
-  max-width: 100%;
   width: 100%;
+  color: #000000;
 }
 
-.card img, .mobile img, img {
+.card img, img {
   max-width: 100% !important;
-  max-height: 40vh !important;
+  max-height: 45vh !important;
   height: auto !important;
-  width: auto !important;
-  object-fit: contain !important;
-  margin: 0.75rem auto !important;
   display: block !important;
+  margin: 12px auto !important;
   filter: grayscale(100%) !important;
 }
 
-.card table, .card div, .card p, .card span, .card pre, .card code {
+.card table, .card div, .card p, .card span {
   max-width: 100% !important;
   box-sizing: border-box !important;
-  overflow-wrap: anywhere !important;
   word-break: break-word !important;
 }
 
-.card table {
-  width: 100% !important;
-  table-layout: fixed !important;
-}
-
-/* Prevents the furigana from being selected */
-ruby > rt {
-  user-select: none;
-}
-
-/* Force all text elements, bold, and highlights to be black/white and bold */
-b, strong, mark, [style*="background-color"], [style*="color"], font {
-  font-weight: bold !important;
-  color: #000000 !important;
-  background-color: transparent !important;
-}
-
-/* Ensure cloze deletions and highlights are bold and black/white */
-.cloze, .clozef, .clozeb, [class*="cloze"] {
-  font-weight: bold !important;
-  color: #000000 !important;
-}
-
-/* Custom UI size scaling */
-.ui-small {
-  font-size: 13px !important;
-}
-.ui-small button, .ui-small input, .ui-small label, .ui-small select {
-  font-size: 0.85em !important;
-}
-.ui-small .text-6xl { font-size: 2.2rem !important; }
-.ui-small .text-4xl { font-size: 1.6rem !important; }
-.ui-small .text-3xl { font-size: 1.25rem !important; }
-.ui-small .text-2xl { font-size: 1.1rem !important; }
-.ui-small .text-xl { font-size: 0.95rem !important; }
-
-.ui-large {
-  font-size: 18px !important;
-}
-.ui-large button, .ui-large input, .ui-large label, .ui-large select {
-  font-size: 1.1em !important;
-}
-.ui-large .text-6xl { font-size: 4.5rem !important; }
-.ui-large .text-4xl { font-size: 3.2rem !important; }
-.ui-large .text-3xl { font-size: 2.5rem !important; }
-.ui-large .text-2xl { font-size: 1.85rem !important; }
-.ui-large .text-xl { font-size: 1.5rem !important; }
-
-.ui-xl {
-  font-size: 22px !important;
-}
-.ui-xl button, .ui-xl input, .ui-xl label, .ui-xl select {
-  font-size: 1.25em !important;
-}
-.ui-xl .text-6xl { font-size: 5.5rem !important; }
-.ui-xl .text-4xl { font-size: 4rem !important; }
-.ui-xl .text-3xl { font-size: 3.2rem !important; }
-.ui-xl .text-2xl { font-size: 2.4rem !important; }
-.ui-xl .text-xl { font-size: 1.9rem !important; }
-
+/* UI Scaling */
+.ui-small { font-size: 13px !important; }
+.ui-small button, .ui-small input { font-size: 13px !important; }
+.ui-large { font-size: 19px !important; }
+.ui-large button, .ui-large input { font-size: 19px !important; }
+.ui-xl { font-size: 24px !important; }
+.ui-xl button, .ui-xl input { font-size: 24px !important; }
