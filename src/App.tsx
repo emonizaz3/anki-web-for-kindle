@@ -698,64 +698,6 @@ function StudySession({
 
   return (
     <div className="flex flex-col h-full w-full">
-      {/* Kindle E-ink Study Actions Toolbar */}
-      <div className="border-b-2 border-black bg-white py-2 px-4 flex flex-wrap gap-2 items-center justify-between font-sans shrink-0">
-        <div className="flex flex-wrap gap-2">
-          <button 
-            onClick={() => onAction("mark")} 
-            className={`border-2 border-black px-3 py-1.5 text-xs font-bold uppercase tracking-widest hover:bg-black hover:text-white active:invert transition-none select-none shrink-0 ${card.starred ? 'bg-black text-white' : 'bg-white text-black'}`}
-            style={{ minHeight: "34px" }}
-          >
-            ★ {card.starred ? "Starred" : "Star Note"}
-          </button>
-          
-          <div className="relative group">
-            <button 
-              className="border-2 border-black bg-white text-black px-3 py-1.5 text-xs font-bold uppercase tracking-widest hover:bg-black hover:text-white active:invert transition-none select-none shrink-0"
-              style={{ minHeight: "34px" }}
-            >
-              ⚑ Flag {card.flagColor ? `(${card.flagColor})` : ""} &darr;
-            </button>
-            <div className="absolute left-0 mt-1 hidden group-hover:flex flex-col bg-white border-2 border-black z-50 p-1 w-40 divide-y divide-black/10 shadow-md">
-              {["red", "orange", "green", "blue", "pink", "turquoise", "purple", "none"].map(color => (
-                <button
-                  key={color}
-                  onClick={() => onAction("flag", color)}
-                  className="w-full text-left px-3 py-2 text-xs font-bold uppercase hover:bg-black hover:text-white bg-white text-black active:invert transition-none"
-                >
-                  {color === "none" ? "Clear Flag" : `${color} ■`}
-                </button>
-              ))}
-            </div>
-          </div>
-          
-          <button 
-            onClick={() => onAction("suspend_card")} 
-            className="border-2 border-black bg-white text-black px-3 py-1.5 text-xs font-bold uppercase tracking-widest hover:bg-black hover:text-white active:invert transition-none select-none shrink-0"
-            style={{ minHeight: "34px" }}
-          >
-            ⊘ Suspend Card
-          </button>
-          <button 
-            onClick={() => onAction("suspend_note")} 
-            className="border-2 border-black bg-white text-black px-3 py-1.5 text-xs font-bold uppercase tracking-widest hover:bg-black hover:text-white active:invert transition-none select-none shrink-0"
-            style={{ minHeight: "34px" }}
-          >
-            ⊘ Suspend Note
-          </button>
-        </div>
-        
-        <div>
-          <button 
-            onClick={() => onAction("undo")} 
-            className="border-2 border-black bg-white text-black px-3 py-1.5 text-xs font-bold uppercase tracking-widest hover:bg-black hover:text-white active:invert transition-none select-none shrink-0"
-            style={{ minHeight: "34px" }}
-          >
-            ↶ Undo last
-          </button>
-        </div>
-      </div>
-
       {/* Card Counts Sub-Bar */}
       <div className="border-b-2 border-black bg-gray-100 py-2 px-4 flex flex-wrap items-center justify-between font-sans text-xs shrink-0 select-none gap-2">
         <div className="flex items-center gap-2 flex-wrap">
@@ -792,18 +734,9 @@ function StudySession({
 
       <div className="flex-grow flex flex-col items-center justify-start py-6 px-4 md:px-12 overflow-y-auto w-full">
         <div className="text-center w-full max-w-3xl relative border-2 border-black p-4 md:p-6 pt-12 bg-white flex flex-col justify-start min-h-[350px] max-h-[55vh] my-auto overflow-hidden break-words max-w-full">
-          {/* Top-Left Corner: Star & Img Toggle Button */}
-          <div className="absolute top-2 left-2 flex items-center gap-2 z-20">
-            <div 
-              className="cursor-pointer select-none text-black hover:scale-110 active:scale-95 flex items-center justify-center" 
-              onClick={() => onAction("mark")}
-            >
-              <span className="text-2xl md:text-3xl leading-none" title="Starred note">
-                {card.starred ? "★" : "☆"}
-              </span>
-            </div>
-
-            {hasImage && (
+          {/* Top-Left Corner: Img Toggle Button */}
+          {hasImage && (
+            <div className="absolute top-2 left-2 z-20">
               <button 
                 onClick={() => setCardMode(prev => prev === "text" ? "image" : "text")}
                 className="border-2 border-black bg-white text-black px-2 py-0.5 text-xs font-bold uppercase tracking-wider hover:bg-black hover:text-white cursor-pointer select-none shadow-sm leading-none"
@@ -811,23 +744,6 @@ function StudySession({
               >
                 {cardMode === "text" ? "Img" : "Text"}
               </button>
-            )}
-          </div>
-
-          {/* Flag indicator shown top-right */}
-          {card.flagColor && (
-            <div 
-              className="absolute top-2 right-2 flex items-center gap-1 select-none font-sans text-xs font-bold uppercase tracking-widest z-20"
-            >
-              <span 
-                style={{
-                  color: card.flagColor === "none" ? "inherit" : card.flagColor,
-                }}
-                className="border border-black px-2 py-0.5 bg-white shadow-sm"
-                title={`Flag: ${card.flagColor}`}
-              >
-                {card.flagColor.toUpperCase()} ■
-              </span>
             </div>
           )}
 
