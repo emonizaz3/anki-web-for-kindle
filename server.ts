@@ -1,6 +1,5 @@
 import express from "express";
 import path from "path";
-import { createServer as createViteServer } from "vite";
 import { v4 as uuidv4 } from "uuid";
 import puppeteer from "puppeteer-extra";
 import StealthPlugin from "puppeteer-extra-plugin-stealth";
@@ -20,13 +19,14 @@ async function launchBrowser() {
       const chromium = (await import("@sparticuz/chromium")).default;
       const puppeteerCore = (await import("puppeteer-core")).default;
       return await puppeteerCore.launch({
-        args: chromium.args,
+        args: [...chromium.args, "--no-sandbox", "--disable-setuid-sandbox", "--disable-dev-shm-usage"],
         defaultViewport: chromium.defaultViewport,
         executablePath: await chromium.executablePath(),
-        headless: chromium.headless,
+        headless: true,
       });
     } catch (err: any) {
-      console.warn("Chromium serverless launch warning:", err?.message || err);
+      console.error("Chromium serverless launch warning:", err?.message || err);
+      throw err;
     }
   }
   return await puppeteer.launch({
@@ -1134,6 +1134,7 @@ async function startServer() {
   // Vite & static middleware (local dev only)
   if (!process.env.VERCEL) {
     if (process.env.NODE_ENV !== "production") {
+      const { createServer: createViteServer } = await import("vite");
       const vite = await createViteServer({
         server: { middlewareMode: true },
         appType: "spa",
