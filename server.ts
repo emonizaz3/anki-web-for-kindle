@@ -56,7 +56,7 @@ async function startServer() {
         console.warn("Could not emulate timezone on login:", timezone, err);
       });
       
-      await page.goto("https://ankiweb.net/account/login", { waitUntil: "domcontentloaded" });
+      await page.goto("https://ankiweb.net/account/login", { waitUntil: "networkidle2" });
       
       // Wait for login form
       await page.waitForSelector('input[type="text"][autocomplete="username"]', { timeout: 10000 });
@@ -67,7 +67,7 @@ async function startServer() {
       await page.click('button.btn-primary');
       
       // Wait for navigation to decks
-      await page.waitForNavigation({ waitUntil: "domcontentloaded" });
+      await page.waitForNavigation({ waitUntil: "networkidle2" });
       
       // Check if we reached decks
       const url = page.url();
@@ -109,7 +109,7 @@ async function startServer() {
       }
 
       if (!page.url().includes("decks") || timezoneChanged) {
-        await page.goto("https://ankiweb.net/decks/", { waitUntil: "domcontentloaded" });
+        await page.goto("https://ankiweb.net/decks/", { waitUntil: "networkidle2" });
       }
 
       // Scrape decks
@@ -228,7 +228,7 @@ async function startServer() {
       }
 
       if (!page.url().includes("decks") || timezoneChanged) {
-        await page.goto("https://ankiweb.net/decks/", { waitUntil: "domcontentloaded" });
+        await page.goto("https://ankiweb.net/decks/", { waitUntil: "networkidle2" });
       }
 
       // Wait for SvelteKit hydration
