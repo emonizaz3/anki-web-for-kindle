@@ -4,8 +4,8 @@
   "framework": "vite",
   "rewrites": [
     {
-      "source": "/api/(.*)",
-      "destination": "/api/index.ts"
+      "source": "/api/:path*",
+      "destination": "https://ais-dev-hrjixr7pgyykvqipfmixsp-166051209427.asia-east1.run.app/api/:path*"
     },
     {
       "source": "/((?!api/.*).*)",
