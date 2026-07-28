@@ -17,16 +17,15 @@ type ViewState =
   | { name: "STUDY"; deck: Deck; card: any; remaining: number }
   | { name: "FINISHED"; deck: Deck };
 
-const CLOUD_RUN_BACKEND = "https://ais-dev-hrjixr7pgyykvqipfmixsp-166051209427.asia-east1.run.app";
-const API_BASE = (import.meta.env.VITE_API_BASE_URL || CLOUD_RUN_BACKEND).replace(/\/$/, "");
+const API_BASE = (import.meta.env.VITE_API_BASE_URL || "").replace(/\/$/, "");
 
 async function safeFetchJson(url: string, options?: RequestInit) {
   const fullUrl = url.startsWith("http") ? url : `${API_BASE}${url}`;
   let res: Response;
   try {
     res = await fetch(fullUrl, options);
-  } catch (err) {
-    throw new Error(`Cannot connect to AnkiWeb backend server. If running on Vercel, set VITE_API_BASE_URL in Environment Variables. If running locally, run 'npm run dev'.`);
+  } catch (err: any) {
+    throw new Error(`Cannot connect to backend server. Make sure server is running.`);
   }
 
   if (res.status === 401) {
