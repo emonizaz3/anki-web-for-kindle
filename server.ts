@@ -13,8 +13,30 @@ const PORT = 3000;
 // Simple in-memory session store
 const sessions: Record<string, { browser: any; page: any }> = {};
 
+async function launchBrowser() {
+  const isVercel = !!process.env.VERCEL || !!process.env.AWS_REGION;
+  if (isVercel) {
+    try {
+      const chromium = (await import("@sparticuz/chromium")).default;
+      return await puppeteer.launch({
+        args: chromium.args,
+        defaultViewport: chromium.defaultViewport,
+        executablePath: await chromium.executablePath(),
+        headless: chromium.headless,
+      });
+    } catch (err) {
+      console.warn("Chromium serverless launch warning:", err);
+    }
+  }
+  return await puppeteer.launch({
+    headless: true,
+    args: ["--no-sandbox", "--disable-setuid-sandbox"],
+  });
+}
+
+export const app = express();
+
 async function startServer() {
-  const app = express();
   app.use(express.json());
 
   // Allow CORS for Vercel frontend
@@ -38,10 +60,7 @@ async function startServer() {
     }
 
     try {
-      const browser = await puppeteer.launch({
-        headless: true,
-        args: ["--no-sandbox", "--disable-setuid-sandbox"],
-      });
+      const browser = await launchBrowser();
       const page = await browser.newPage();
       await page.evaluateOnNewDocument(() => {
         (window as any).__name = (f: any) => f;
@@ -1126,9 +1145,13 @@ async function startServer() {
     });
   }
 
-  app.listen(PORT, "0.0.0.0", () => {
-    console.log(`Server running on http://localhost:${PORT}`);
-  });
+  if (!process.env.VERCEL) {
+    app.listen(PORT, "0.0.0.0", () => {
+      console.log(`Server running on http://localhost:${PORT}`);
+    });
+  }
 }
 
 startServer();
+
+export default app;
