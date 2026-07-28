@@ -17,6 +17,25 @@ type ViewState =
   | { name: "STUDY"; deck: Deck; card: any; remaining: number }
   | { name: "FINISHED"; deck: Deck };
 
+async function safeFetchJson(url: string, options?: RequestInit) {
+  const res = await fetch(url, options);
+  if (res.status === 401) {
+    return { ok: false, status: 401, data: { error: "Unauthorized" } };
+  }
+  const text = await res.text();
+  if (!text || !text.trim()) {
+    throw new Error(`Empty server response (Status ${res.status}). Ensure backend API server is running.`);
+  }
+  try {
+    return { ok: res.ok, status: res.status, data: JSON.parse(text) };
+  } catch {
+    if (text.trim().startsWith("<")) {
+      throw new Error(`API endpoint returned HTML instead of JSON (Status ${res.status}). Check backend server connectivity.`);
+    }
+    throw new Error(`Invalid JSON response from server.`);
+  }
+}
+
 export default function App() {
   const [sessionId, setSessionId] = useState<string | null>(() => localStorage.getItem("ankiweb_session"));
   const [view, setView] = useState<ViewState>(() => {
@@ -67,19 +86,18 @@ export default function App() {
   const fetchDecks = async () => {
     setLoading(true);
     try {
-      const res = await fetch("/api/decks", {
+      const { ok, status, data } = await safeFetchJson("/api/decks", {
         headers: { 
           "x-session-id": sessionId!,
           "x-timezone": timezone
         }
       });
-      if (res.status === 401) {
+      if (status === 401) {
         localStorage.removeItem("ankiweb_session");
         setSessionId(null);
         setView({ name: "LOGIN" });
         return;
       }
-      const data = await res.json();
       if (Array.isArray(data)) {
         setDecks(data);
       } else {
@@ -88,7 +106,7 @@ export default function App() {
           console.error("Error fetching decks:", data.error);
         }
       }
-    } catch (e) {
+    } catch (e: any) {
       console.error(e);
     } finally {
       setLoading(false);
@@ -473,7 +491,7 @@ function Login({ timezone, onLogin }: { timezone: string; onLogin: (sid: string)
     setLoggingIn(true);
     setError("");
     try {
-      const res = await fetch("/api/login", {
+      const { ok, data } = await safeFetchJson("/api/login", {
         method: "POST",
         headers: { 
           "Content-Type": "application/json",
@@ -481,8 +499,7 @@ function Login({ timezone, onLogin }: { timezone: string; onLogin: (sid: string)
         },
         body: JSON.stringify({ email, password })
       });
-      const data = await res.json();
-      if (res.ok) {
+      if (ok && data.sessionId) {
         localStorage.setItem("ankiweb_session", data.sessionId);
         onLogin(data.sessionId);
       } else {
