@@ -18,14 +18,15 @@ async function launchBrowser() {
   if (isVercel) {
     try {
       const chromium = (await import("@sparticuz/chromium")).default;
-      return await puppeteer.launch({
+      const puppeteerCore = (await import("puppeteer-core")).default;
+      return await puppeteerCore.launch({
         args: chromium.args,
         defaultViewport: chromium.defaultViewport,
         executablePath: await chromium.executablePath(),
         headless: chromium.headless,
       });
-    } catch (err) {
-      console.warn("Chromium serverless launch warning:", err);
+    } catch (err: any) {
+      console.warn("Chromium serverless launch warning:", err?.message || err);
     }
   }
   return await puppeteer.launch({
@@ -1130,22 +1131,22 @@ async function startServer() {
     }
   }
 
-  // Vite middleware
-  if (process.env.NODE_ENV !== "production") {
-    const vite = await createViteServer({
-      server: { middlewareMode: true },
-      appType: "spa",
-    });
-    app.use(vite.middlewares);
-  } else {
-    const distPath = path.join(process.cwd(), "dist");
-    app.use(express.static(distPath));
-    app.get("*", (req, res) => {
-      res.sendFile(path.join(distPath, "index.html"));
-    });
-  }
-
+  // Vite & static middleware (local dev only)
   if (!process.env.VERCEL) {
+    if (process.env.NODE_ENV !== "production") {
+      const vite = await createViteServer({
+        server: { middlewareMode: true },
+        appType: "spa",
+      });
+      app.use(vite.middlewares);
+    } else {
+      const distPath = path.join(process.cwd(), "dist");
+      app.use(express.static(distPath));
+      app.get("*", (req, res) => {
+        res.sendFile(path.join(distPath, "index.html"));
+      });
+    }
+
     app.listen(PORT, "0.0.0.0", () => {
       console.log(`Server running on http://localhost:${PORT}`);
     });
