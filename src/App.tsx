@@ -791,14 +791,14 @@ function StudySession({
       </div>
 
       <div className="flex-grow flex flex-col items-center justify-start py-6 px-4 md:px-12 overflow-y-auto w-full">
-        <div className="text-center w-full max-w-3xl relative border-2 border-black p-6 md:p-12 bg-white flex flex-col justify-center min-h-[350px] max-h-[55vh] my-auto overflow-y-auto break-words max-w-full">
-          {/* Top-Left: Star & Image Toggle Button */}
-          <div className="absolute top-3 left-3 flex items-center gap-3 z-10">
+        <div className="text-center w-full max-w-3xl relative border-2 border-black p-4 md:p-6 pt-12 bg-white flex flex-col justify-start min-h-[350px] max-h-[55vh] my-auto overflow-hidden break-words max-w-full">
+          {/* Top-Left Corner: Star & Img Toggle Button */}
+          <div className="absolute top-2 left-2 flex items-center gap-2 z-20">
             <div 
-              className="cursor-pointer select-none text-black hover:scale-110 active:scale-95" 
+              className="cursor-pointer select-none text-black hover:scale-110 active:scale-95 flex items-center justify-center" 
               onClick={() => onAction("mark")}
             >
-              <span className="text-3xl md:text-4xl" title="Starred note">
+              <span className="text-2xl md:text-3xl leading-none" title="Starred note">
                 {card.starred ? "★" : "☆"}
               </span>
             </div>
@@ -806,10 +806,10 @@ function StudySession({
             {hasImage && (
               <button 
                 onClick={() => setCardMode(prev => prev === "text" ? "image" : "text")}
-                className="border-2 border-black bg-white text-black px-3 py-1.5 text-xs font-bold uppercase tracking-wider hover:bg-black hover:text-white cursor-pointer select-none shadow-sm"
+                className="border-2 border-black bg-white text-black px-2 py-0.5 text-xs font-bold uppercase tracking-wider hover:bg-black hover:text-white cursor-pointer select-none shadow-sm leading-none"
                 title="Toggle between Card Text and Image"
               >
-                {cardMode === "text" ? "📷 View Image" : "📄 View Text"}
+                {cardMode === "text" ? "Img" : "Text"}
               </button>
             )}
           </div>
@@ -817,7 +817,7 @@ function StudySession({
           {/* Flag indicator shown top-right */}
           {card.flagColor && (
             <div 
-              className="absolute top-4 right-4 flex items-center gap-1 select-none font-sans text-xs font-bold uppercase tracking-widest z-10"
+              className="absolute top-2 right-2 flex items-center gap-1 select-none font-sans text-xs font-bold uppercase tracking-widest z-20"
             >
               <span 
                 style={{
@@ -831,19 +831,21 @@ function StudySession({
             </div>
           )}
 
-          {card.front && card.front.startsWith("DEBUG") ? (
-            <pre className="text-sm text-left overflow-auto whitespace-pre-wrap max-h-[60vh] bg-gray-100 p-4 border border-black">{card.front}</pre>
-          ) : (
-            <div className="mb-8 card mobile overflow-y-auto max-h-[40vh] max-w-full pr-2 text-left md:text-center" style={{ fontSize: `${sizePx}px` }} dangerouslySetInnerHTML={{ __html: renderCardHtml(card.front) }}></div>
-          )}
-          {card.back !== null && card.back !== "" && (
-            <>
-              <div className="w-full max-w-xl h-[2px] bg-black mx-auto mb-12 shrink-0"></div>
-              <div className="text-center w-full">
-                <div className="mb-6 card mobile overflow-y-auto max-h-[40vh] max-w-full pr-2 text-left md:text-center" style={{ fontSize: `${sizePx}px` }} dangerouslySetInnerHTML={{ __html: renderCardHtml(card.back) }}></div>
-              </div>
-            </>
-          )}
+          <div className="w-full flex-grow flex flex-col justify-center items-center overflow-y-auto max-h-[44vh] my-auto pt-2">
+            {card.front && card.front.startsWith("DEBUG") ? (
+              <pre className="text-sm text-left overflow-auto whitespace-pre-wrap max-h-[60vh] bg-gray-100 p-4 border border-black">{card.front}</pre>
+            ) : (
+              <div className="mb-6 card mobile max-w-full pr-2 text-left md:text-center" style={{ fontSize: `${sizePx}px` }} dangerouslySetInnerHTML={{ __html: renderCardHtml(card.front) }}></div>
+            )}
+            {card.back !== null && card.back !== "" && (
+              <>
+                <div className="w-full max-w-xl h-[2px] bg-black mx-auto mb-8 shrink-0"></div>
+                <div className="text-center w-full">
+                  <div className="mb-4 card mobile max-w-full pr-2 text-left md:text-center" style={{ fontSize: `${sizePx}px` }} dangerouslySetInnerHTML={{ __html: renderCardHtml(card.back) }}></div>
+                </div>
+              </>
+            )}
+          </div>
         </div>
       </div>
 
