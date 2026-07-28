@@ -7,7 +7,7 @@ import fs from "fs";
 
 puppeteer.use(StealthPlugin());
 
-const PORT = 3000;
+const PORT = process.env.PORT || 3000;
 
 // Simple in-memory session store
 const sessions: Record<string, { browser: any; page: any }> = {};
@@ -31,7 +31,7 @@ async function launchBrowser() {
   }
   return await puppeteer.launch({
     headless: true,
-    args: ["--no-sandbox", "--disable-setuid-sandbox"],
+    args: ["--no-sandbox", "--disable-setuid-sandbox", "--disable-dev-shm-usage", "--single-process"],
   });
 }
 
