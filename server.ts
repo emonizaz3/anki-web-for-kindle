@@ -13,43 +13,10 @@ const PORT = process.env.PORT || 3000;
 const sessions: Record<string, { browser: any; page: any }> = {};
 
 async function launchBrowser() {
-  const isVercel = !!process.env.VERCEL || !!process.env.AWS_REGION;
-  if (isVercel) {
-    try {
-      const chromium = (await import("@sparticuz/chromium")).default;
-      const puppeteerCore = (await import("puppeteer-core")).default;
-      return await puppeteerCore.launch({
-        args: [...chromium.args, "--no-sandbox", "--disable-setuid-sandbox", "--disable-dev-shm-usage"],
-        defaultViewport: chromium.defaultViewport,
-        executablePath: await chromium.executablePath(),
-        headless: true,
-      });
-    } catch (err: any) {
-      console.error("Chromium serverless launch warning:", err?.message || err);
-      throw err;
-    }
-  }
-  try {
-    return await puppeteer.launch({
-      headless: true,
-      args: ["--no-sandbox", "--disable-setuid-sandbox", "--disable-dev-shm-usage", "--single-process"],
-    });
-  } catch (err: any) {
-    console.warn("Standard Puppeteer launch failed, falling back to bundled Chromium:", err?.message || err);
-    try {
-      const chromium = (await import("@sparticuz/chromium")).default;
-      const puppeteerCore = (await import("puppeteer-core")).default;
-      return await puppeteerCore.launch({
-        args: [...chromium.args, "--no-sandbox", "--disable-setuid-sandbox", "--disable-dev-shm-usage", "--single-process"],
-        defaultViewport: chromium.defaultViewport,
-        executablePath: await chromium.executablePath(),
-        headless: true,
-      });
-    } catch (fallbackErr: any) {
-      console.error("Fallback Chromium launch failed:", fallbackErr?.message || fallbackErr);
-      throw err;
-    }
-  }
+  return await puppeteer.launch({
+    headless: true,
+    args: ["--no-sandbox", "--disable-setuid-sandbox", "--disable-dev-shm-usage", "--single-process"],
+  });
 }
 
 export const app = express();
