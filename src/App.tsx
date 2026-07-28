@@ -792,14 +792,26 @@ function StudySession({
 
       <div className="flex-grow flex flex-col items-center justify-start py-6 px-4 md:px-12 overflow-y-auto w-full">
         <div className="text-center w-full max-w-3xl relative border-2 border-black p-6 md:p-12 bg-white flex flex-col justify-center min-h-[350px] max-h-[55vh] my-auto overflow-y-auto break-words max-w-full">
-          {/* Star indicator shown top-left */}
-          <div 
-            className="absolute top-4 left-4 flex items-center gap-1 cursor-pointer select-none text-black hover:scale-110 active:scale-95 z-10" 
-            onClick={() => onAction("mark")}
-          >
-            <span className="text-4xl" title="Starred note">
-              {card.starred ? "★" : "☆"}
-            </span>
+          {/* Top-Left: Star & Image Toggle Button */}
+          <div className="absolute top-3 left-3 flex items-center gap-3 z-10">
+            <div 
+              className="cursor-pointer select-none text-black hover:scale-110 active:scale-95" 
+              onClick={() => onAction("mark")}
+            >
+              <span className="text-3xl md:text-4xl" title="Starred note">
+                {card.starred ? "★" : "☆"}
+              </span>
+            </div>
+
+            {hasImage && (
+              <button 
+                onClick={() => setCardMode(prev => prev === "text" ? "image" : "text")}
+                className="border-2 border-black bg-white text-black px-3 py-1.5 text-xs font-bold uppercase tracking-wider hover:bg-black hover:text-white cursor-pointer select-none shadow-sm"
+                title="Toggle between Card Text and Image"
+              >
+                {cardMode === "text" ? "📷 View Image" : "📄 View Text"}
+              </button>
+            )}
           </div>
 
           {/* Flag indicator shown top-right */}
@@ -832,31 +844,20 @@ function StudySession({
               </div>
             </>
           )}
-
-          {/* Toggle button at bottom right of the card to switch between Card Text and Image */}
-          {hasImage && (
-            <button 
-              onClick={() => setCardMode(prev => prev === "text" ? "image" : "text")}
-              className="absolute bottom-3 right-3 border-2 border-black bg-white text-black px-3 py-1.5 text-xs font-bold uppercase tracking-wider hover:bg-black hover:text-white cursor-pointer z-10 select-none shadow-sm"
-              title="Toggle between Card Text and Image"
-            >
-              {cardMode === "text" ? "📷 View Image" : "📄 View Text"}
-            </button>
-          )}
         </div>
       </div>
 
       {card.back === null ? (
-        <footer className="h-32 border-t-2 border-black bg-white flex shrink-0">
+        <footer className="h-40 border-t-2 border-black bg-white flex shrink-0">
           <div 
             className="flex-1 flex flex-col items-center justify-center hover:bg-black hover:text-white cursor-pointer active:invert"
             onClick={onReveal}
           >
-            <span className="text-3xl font-bold uppercase tracking-widest font-sans">Show Answer</span>
+            <span className="text-3xl md:text-4xl font-bold uppercase tracking-widest font-sans">Show Answer</span>
           </div>
         </footer>
       ) : (
-        <footer className="grid grid-cols-4 h-32 border-t-2 border-black bg-white shrink-0">
+        <footer className="grid grid-cols-4 h-40 border-t-2 border-black bg-white shrink-0">
           {card.rateButtons && card.rateButtons.length > 0 ? (
             card.rateButtons.map((btn: any) => {
               const displayInterval = (btn.interval && btn.interval.trim() !== "") 
@@ -865,33 +866,33 @@ function StudySession({
               return (
                 <div 
                   key={btn.index} 
-                  className="flex flex-col items-center justify-center border-r border-black last:border-r-0 hover:bg-black hover:text-white cursor-pointer active:invert" 
+                  className="flex flex-col items-center justify-center p-2 text-center border-r border-black last:border-r-0 hover:bg-black hover:text-white cursor-pointer active:invert" 
                   onClick={() => onReview(btn.index - 1)}
                 >
-                  <span className="text-xl md:text-2xl font-bold">{btn.name}</span>
+                  <span className="text-2xl md:text-3xl font-bold uppercase block">{btn.name}</span>
                   {displayInterval && (
-                    <span className="font-sans text-xs uppercase opacity-60 tracking-wider mt-1">{displayInterval}</span>
+                    <span className="font-sans text-xs md:text-sm font-bold uppercase opacity-75 tracking-wider mt-2 block">{displayInterval}</span>
                   )}
                 </div>
               );
             })
           ) : (
             <>
-              <div className="flex flex-col items-center justify-center border-r border-black hover:bg-black hover:text-white cursor-pointer active:invert" onClick={() => onReview(0)}>
-                <span className="text-xl md:text-2xl font-bold">Again</span>
-                <span className="font-sans text-xs uppercase opacity-60 tracking-wider mt-1">&lt; 1 min</span>
+              <div className="flex flex-col items-center justify-center p-2 text-center border-r border-black hover:bg-black hover:text-white cursor-pointer active:invert" onClick={() => onReview(0)}>
+                <span className="text-2xl md:text-3xl font-bold uppercase block">Again</span>
+                <span className="font-sans text-xs md:text-sm font-bold uppercase opacity-75 tracking-wider mt-2 block">&lt; 1 min</span>
               </div>
-              <div className="flex flex-col items-center justify-center border-r border-black hover:bg-black hover:text-white cursor-pointer active:invert" onClick={() => onReview(1)}>
-                <span className="text-xl md:text-2xl font-bold">Hard</span>
-                <span className="font-sans text-xs uppercase opacity-60 tracking-wider mt-1">1d</span>
+              <div className="flex flex-col items-center justify-center p-2 text-center border-r border-black hover:bg-black hover:text-white cursor-pointer active:invert" onClick={() => onReview(1)}>
+                <span className="text-2xl md:text-3xl font-bold uppercase block">Hard</span>
+                <span className="font-sans text-xs md:text-sm font-bold uppercase opacity-75 tracking-wider mt-2 block">1d</span>
               </div>
-              <div className="flex flex-col items-center justify-center border-r border-black hover:bg-black hover:text-white cursor-pointer active:invert" onClick={() => onReview(2)}>
-                <span className="text-xl md:text-2xl font-bold">Good</span>
-                <span className="font-sans text-xs uppercase opacity-60 tracking-wider mt-1">3d</span>
+              <div className="flex flex-col items-center justify-center p-2 text-center border-r border-black hover:bg-black hover:text-white cursor-pointer active:invert" onClick={() => onReview(2)}>
+                <span className="text-2xl md:text-3xl font-bold uppercase block">Good</span>
+                <span className="font-sans text-xs md:text-sm font-bold uppercase opacity-75 tracking-wider mt-2 block">3d</span>
               </div>
-              <div className="flex flex-col items-center justify-center hover:bg-black hover:text-white cursor-pointer active:invert" onClick={() => onReview(3)}>
-                <span className="text-xl md:text-2xl font-bold">Easy</span>
-                <span className="font-sans text-xs uppercase opacity-60 tracking-wider mt-1">4d</span>
+              <div className="flex flex-col items-center justify-center p-2 text-center hover:bg-black hover:text-white cursor-pointer active:invert" onClick={() => onReview(3)}>
+                <span className="text-2xl md:text-3xl font-bold uppercase block">Easy</span>
+                <span className="font-sans text-xs md:text-sm font-bold uppercase opacity-75 tracking-wider mt-2 block">4d</span>
               </div>
             </>
           )}
