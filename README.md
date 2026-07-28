@@ -1,3 +1,4 @@
+<!-- Vercel Deployment Trigger: 2026-07-28 -->
 # 📚 AnkiWeb for Kindle
 
 A minimalist, high-contrast, **Kindle-optimized web application** for studying [AnkiWeb](https://ankiweb.net) flashcards seamlessly on e-ink devices like Amazon Kindle.
