@@ -38,9 +38,13 @@ async function safeFetchJson(url: string, options?: RequestInit) {
   }
 
   try {
-    return { ok: res.ok, status: res.status, data: JSON.parse(text) };
+    const data = JSON.parse(text);
+    return { ok: res.ok, status: res.status, data };
   } catch {
-    throw new Error(`Cannot reach AnkiWeb backend server at ${fullUrl}. Ensure your backend server is deployed (e.g. Render/Railway) and VITE_API_BASE_URL is configured.`);
+    if (res.status === 404) {
+      throw new Error(`API Endpoint not found (404). Please run 'git push' to deploy the new serverless API to Vercel.`);
+    }
+    throw new Error(`Server Error (${res.status}): ${text.slice(0, 120)}`);
   }
 }
 
