@@ -17,22 +17,30 @@ type ViewState =
   | { name: "STUDY"; deck: Deck; card: any; remaining: number }
   | { name: "FINISHED"; deck: Deck };
 
+const API_BASE = (import.meta.env.VITE_API_BASE_URL || "").replace(/\/$/, "");
+
 async function safeFetchJson(url: string, options?: RequestInit) {
-  const res = await fetch(url, options);
+  const fullUrl = url.startsWith("http") ? url : `${API_BASE}${url}`;
+  let res: Response;
+  try {
+    res = await fetch(fullUrl, options);
+  } catch (err) {
+    throw new Error(`Cannot connect to AnkiWeb backend server. If running on Vercel, set VITE_API_BASE_URL in Environment Variables. If running locally, run 'npm run dev'.`);
+  }
+
   if (res.status === 401) {
     return { ok: false, status: 401, data: { error: "Unauthorized" } };
   }
+
   const text = await res.text();
   if (!text || !text.trim()) {
-    throw new Error(`Empty server response (Status ${res.status}). Ensure backend API server is running.`);
+    throw new Error(`Backend server returned empty response (Status ${res.status}). Make sure server.ts is running.`);
   }
+
   try {
     return { ok: res.ok, status: res.status, data: JSON.parse(text) };
   } catch {
-    if (text.trim().startsWith("<")) {
-      throw new Error(`API endpoint returned HTML instead of JSON (Status ${res.status}). Check backend server connectivity.`);
-    }
-    throw new Error(`Invalid JSON response from server.`);
+    throw new Error(`Cannot reach AnkiWeb backend server at ${fullUrl}. Ensure your backend server is deployed (e.g. Render/Railway) and VITE_API_BASE_URL is configured.`);
   }
 }
 
