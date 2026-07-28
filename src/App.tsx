@@ -366,9 +366,7 @@ export default function App() {
         )}
       </main>
 
-      <div className="h-6 bg-black text-white flex items-center justify-center shrink-0">
-        <span className="text-[10px] font-sans font-bold uppercase tracking-[0.3em]">Kindle Web Browser Interface</span>
-      </div>
+
 
       {showSettings && (
         <div className="fixed inset-0 bg-white z-[999] flex flex-col p-6 md:p-12 overflow-y-auto">
@@ -677,6 +675,27 @@ function StudySession({
     activeCategory = "new";
   }
 
+  const [cardMode, setCardMode] = useState<"text" | "image">("text");
+
+  useEffect(() => {
+    setCardMode("text");
+  }, [card.front, card.back]);
+
+  const hasImage = Boolean((card.front && card.front.includes("<img")) || (card.back && card.back.includes("<img")));
+
+  const renderCardHtml = (html: string | null) => {
+    if (!html) return "";
+    if (cardMode === "text") {
+      return html.replace(/<img[^>]*>/gi, "");
+    } else {
+      const imgs = html.match(/<img[^>]*>/gi);
+      if (imgs && imgs.length > 0) {
+        return imgs.join("<br/>");
+      }
+      return html;
+    }
+  };
+
   return (
     <div className="flex flex-col h-full w-full">
       {/* Kindle E-ink Study Actions Toolbar */}
@@ -772,7 +791,7 @@ function StudySession({
       </div>
 
       <div className="flex-grow flex flex-col items-center justify-start py-6 px-4 md:px-12 overflow-y-auto w-full">
-        <div className="text-center w-full max-w-3xl relative border-2 border-black p-6 md:p-12 bg-white flex flex-col justify-center min-h-[350px] my-auto overflow-hidden break-words max-w-full">
+        <div className="text-center w-full max-w-3xl relative border-2 border-black p-6 md:p-12 bg-white flex flex-col justify-center min-h-[350px] max-h-[55vh] my-auto overflow-y-auto break-words max-w-full">
           {/* Star indicator shown top-left */}
           <div 
             className="absolute top-4 left-4 flex items-center gap-1 cursor-pointer select-none text-black hover:scale-110 active:scale-95 z-10" 
@@ -803,15 +822,26 @@ function StudySession({
           {card.front && card.front.startsWith("DEBUG") ? (
             <pre className="text-sm text-left overflow-auto whitespace-pre-wrap max-h-[60vh] bg-gray-100 p-4 border border-black">{card.front}</pre>
           ) : (
-            <div className="mb-8 card mobile overflow-x-auto max-w-full" style={{ fontSize: `${sizePx}px` }} dangerouslySetInnerHTML={{ __html: card.front }}></div>
+            <div className="mb-8 card mobile overflow-y-auto max-h-[40vh] max-w-full pr-2 text-left md:text-center" style={{ fontSize: `${sizePx}px` }} dangerouslySetInnerHTML={{ __html: renderCardHtml(card.front) }}></div>
           )}
           {card.back !== null && card.back !== "" && (
             <>
               <div className="w-full max-w-xl h-[2px] bg-black mx-auto mb-12 shrink-0"></div>
               <div className="text-center w-full">
-                <div className="mb-6 card mobile overflow-x-auto max-w-full" style={{ fontSize: `${sizePx}px` }} dangerouslySetInnerHTML={{ __html: card.back }}></div>
+                <div className="mb-6 card mobile overflow-y-auto max-h-[40vh] max-w-full pr-2 text-left md:text-center" style={{ fontSize: `${sizePx}px` }} dangerouslySetInnerHTML={{ __html: renderCardHtml(card.back) }}></div>
               </div>
             </>
+          )}
+
+          {/* Toggle button at bottom right of the card to switch between Card Text and Image */}
+          {hasImage && (
+            <button 
+              onClick={() => setCardMode(prev => prev === "text" ? "image" : "text")}
+              className="absolute bottom-3 right-3 border-2 border-black bg-white text-black px-3 py-1.5 text-xs font-bold uppercase tracking-wider hover:bg-black hover:text-white cursor-pointer z-10 select-none shadow-sm"
+              title="Toggle between Card Text and Image"
+            >
+              {cardMode === "text" ? "📷 View Image" : "📄 View Text"}
+            </button>
           )}
         </div>
       </div>
