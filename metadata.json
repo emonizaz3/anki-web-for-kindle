@@ -1,0 +1,8 @@
+{
+  "name": "Kindle Anki",
+  "description": "A minimalist, Kindle-optimized spaced repetition flashcard app.",
+  "requestFramePermissions": [],
+  "majorCapabilities": [
+    "MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"
+  ]
+}

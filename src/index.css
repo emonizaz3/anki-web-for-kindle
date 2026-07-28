@@ -1,0 +1,109 @@
+@import "tailwindcss";
+
+@theme {
+  --font-sans: "Inter", ui-sans-serif, system-ui, sans-serif;
+  --font-serif: ui-serif, Georgia, Cambria, "Times New Roman", Times, serif;
+}
+
+/* Kindle optimizations */
+* {
+  transition: none !important;
+  animation: none !important;
+}
+
+body {
+  background-color: #ffffff;
+  color: #000000;
+  font-family: var(--font-serif);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+.card {
+  font-family: "ヒラギノ角ゴ Pro W3", "Hiragino Kaku Gothic Pro", "Noto Sans JP", "Noto Sans CJK JP", Osaka, "メイリオ", Meiryo, "ＭＳ Ｐゴシック", "MS PGothic", "MS UI Gothic", sans-serif;
+  font-size: 44px;
+  text-align: center;
+  word-wrap: break-word;
+  overflow-wrap: anywhere;
+  word-break: break-word;
+  max-width: 100%;
+  width: 100%;
+}
+
+.card img, .mobile img, img {
+  max-width: 100% !important;
+  max-height: 40vh !important;
+  height: auto !important;
+  width: auto !important;
+  object-fit: contain !important;
+  margin: 0.75rem auto !important;
+  display: block !important;
+  filter: grayscale(100%) !important;
+}
+
+.card table, .card div, .card p, .card span, .card pre, .card code {
+  max-width: 100% !important;
+  box-sizing: border-box !important;
+  overflow-wrap: anywhere !important;
+  word-break: break-word !important;
+}
+
+.card table {
+  width: 100% !important;
+  table-layout: fixed !important;
+}
+
+/* Prevents the furigana from being selected */
+ruby > rt {
+  user-select: none;
+}
+
+/* Force all text elements, bold, and highlights to be black/white and bold */
+b, strong, mark, [style*="background-color"], [style*="color"], font {
+  font-weight: bold !important;
+  color: #000000 !important;
+  background-color: transparent !important;
+}
+
+/* Ensure cloze deletions and highlights are bold and black/white */
+.cloze, .clozef, .clozeb, [class*="cloze"] {
+  font-weight: bold !important;
+  color: #000000 !important;
+}
+
+/* Custom UI size scaling */
+.ui-small {
+  font-size: 13px !important;
+}
+.ui-small button, .ui-small input, .ui-small label, .ui-small select {
+  font-size: 0.85em !important;
+}
+.ui-small .text-6xl { font-size: 2.2rem !important; }
+.ui-small .text-4xl { font-size: 1.6rem !important; }
+.ui-small .text-3xl { font-size: 1.25rem !important; }
+.ui-small .text-2xl { font-size: 1.1rem !important; }
+.ui-small .text-xl { font-size: 0.95rem !important; }
+
+.ui-large {
+  font-size: 18px !important;
+}
+.ui-large button, .ui-large input, .ui-large label, .ui-large select {
+  font-size: 1.1em !important;
+}
+.ui-large .text-6xl { font-size: 4.5rem !important; }
+.ui-large .text-4xl { font-size: 3.2rem !important; }
+.ui-large .text-3xl { font-size: 2.5rem !important; }
+.ui-large .text-2xl { font-size: 1.85rem !important; }
+.ui-large .text-xl { font-size: 1.5rem !important; }
+
+.ui-xl {
+  font-size: 22px !important;
+}
+.ui-xl button, .ui-xl input, .ui-xl label, .ui-xl select {
+  font-size: 1.25em !important;
+}
+.ui-xl .text-6xl { font-size: 5.5rem !important; }
+.ui-xl .text-4xl { font-size: 4rem !important; }
+.ui-xl .text-3xl { font-size: 3.2rem !important; }
+.ui-xl .text-2xl { font-size: 2.4rem !important; }
+.ui-xl .text-xl { font-size: 1.9rem !important; }
+
